@@ -1,8 +1,8 @@
--- Field-star negatives, v2: within 1 kpc, parallax known to 20% or better
--- Output: data/gaia_1kpc.csv (574,231 rows)
+-- Field-star negatives, v2 (superseded): within 1 kpc, parallax known to 20% or better
+-- Output: archive/data/gaia_1kpc.csv (574,231 rows)
 --
 -- Run while logged in (anonymous queries are capped at 3,000,000 rows).
--- Every cut must match the selection cell in notebooks/02_wd_classification.ipynb.
+-- Its cuts matched section 2b of the v2 notebook (in git history; the current notebook is v3).
 
 SELECT g.source_id, g.parallax, g.parallax_error, g.parallax_over_error,
        g.phot_g_mean_mag, g.phot_bp_mean_mag, g.phot_rp_mean_mag,

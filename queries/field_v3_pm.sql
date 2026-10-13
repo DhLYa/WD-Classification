@@ -1,10 +1,9 @@
 -- Field-star negatives, v3 (query 2): proper-motion cuts instead of parallax cuts
--- Output: data/gaia_field_pm.csv
+-- Output: data/gaia_field_pm.csv (3,031,564 rows)
 --
 -- Run while logged in (anonymous queries are capped at 3,000,000 rows).
 -- random_index runs over all ~1.81 billion DR3 sources. N = 1,000,000 returned ~32k rows,
--- so ~58M stars pass these cuts; N = 94,000,000 gives ~3M rows.
--- TODO: record the N actually used here.
+-- so ~58M stars pass these cuts. N = 94,000,000 (~5% of the catalogue) returned 3,031,564 rows.
 --
 -- Every cut must match the selection cell in notebooks/02_wd_classification.ipynb.
 
@@ -23,4 +22,4 @@ WHERE g.phot_g_mean_mag < 20.7
   AND g.pm * g.pm >= 5 * SQRT(POWER(g.pmra * g.pmra_error, 2)
                             + POWER(g.pmdec * g.pmdec_error, 2))   -- pm S/N >= 5
   AND ABS(g.b) >= 20 AND g.dec >= -10                      -- approximate SDSS footprint
-  AND g.random_index < 94000000                            -- TODO: confirm N
+  AND g.random_index < 94000000                            -- uniform ~5% subsample
