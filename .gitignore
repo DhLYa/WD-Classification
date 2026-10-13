@@ -1,6 +1,6 @@
-# Data: ~3 GB, too large for GitHub. See the README and data/white_dwarf_data_notes.txt
+# Data: ~3.5 GB, too large for GitHub. See the README and data/README.md
 data/*
-!data/white_dwarf_data_notes.txt
+!data/README.md
 !data/sdss_wd_ids.vot
 
 # Local-only files: old notebook versions, reference papers
