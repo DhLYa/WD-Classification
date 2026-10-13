@@ -275,7 +275,7 @@ The plan, following García-Zamora et al. (2025):
 
 ## Reproducing
 
-1. Create an environment (developed with Python 3.10):
+1. Create an environment (developed with Python 3.11):
    ```
    pip install -r requirements.txt
    ```
