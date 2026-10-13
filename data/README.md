@@ -77,10 +77,35 @@ so both samples are cut and featurised the same way:
 | `phot_*_mean_flux_over_error` | Flux S/N in each band, used for the photometric quality cuts |
 | `ruwe` | Renormalised unit weight error: ≈ 1 for a well-behaved single star; < 1.4 is the standard threshold for reliable astrometry |
 
-**`gaiaedr3_wd_sdssspec.csv`**: the notebook uses only `source_id`, `dr2_source_id` (carried along,
-unused), `spec_class` (the label) and `S/N` (to choose between duplicate spectra). Its own Gaia
-columns are no longer used, because the DR3 query provides them. It also has SDSS ugriz photometry
-(`umag` to `zmag`), unused so far but planned for spectral subtypes (`notebooks/03_wd_subtypes.ipynb`).
+**`gaiaedr3_wd_sdssspec.csv`**: the stage 1 notebook uses only `source_id`, `dr2_source_id`
+(carried along, unused), `spec_class` (the label) and `S/N` (to choose between duplicate spectra).
+Its own Gaia columns are no longer used, because the DR3 query provides them.
+
+**SDSS columns for spectral subtypes** (planned, `notebooks/03_wd_subtypes.ipynb`). The file also
+carries SDSS photometry and cross-match information:
+
+| Column | Meaning | Notes |
+|---|---|---|
+| `umag`, `gmag`, `rmag`, `imag`, `zmag` | SDSS u, g, r, i, z magnitudes | Median ~19.4. Missing for ~188 rows; one row has r = 31.7, a sentinel-like value |
+| `e_umag` … `e_zmag` | Magnitude errors | u is the noisiest band: 2,984 rows have `e_umag` > 0.1 mag, 943 have > 0.2 mag (up to 12) |
+| `sdss_clean` | 0/1 photometry quality flag from the catalogue | 1 for 39,570 / 42,007 rows |
+| `SDSS_separation` | Gaia–SDSS match distance | Median 0.05, max 2.7 (arcseconds) |
+| `SDSS_spec` | Number of SDSS spectra of the object | Repeated on each of that object's rows |
+| `SDSS12`, `Plate`, `MJD`, `FiberID` | SDSS object name and spectrum identifiers | For looking objects up, not modelling |
+
+The photometry and `sdss_clean` are the same on every row of an object; only the spectra differ.
+So deduplicating to one spectrum per object doesn't affect them.
+
+Planned features from these columns are the colours u−g, g−r, r−i and i−z. u−g spans the Balmer
+jump, the standard photometric indicator of DA vs non-DA white dwarfs. Apparent magnitudes stay out
+of the features, as in stage 1, because SDSS chose its targets partly by brightness. Rows with
+missing or out-of-range magnitudes need dropping. It's also worth testing a quality cut such as
+`sdss_clean == 1` or `e_umag < 0.1`; apply it before splitting, and check it doesn't remove one
+type much more than others. Extinction isn't corrected, since it's small at the |b| ≥ 20° the
+selection keeps.
+
+The atmosphere-fit columns stay excluded here too (see section 4). Comparing the hydrogen and
+helium fits (`chisq_H` vs `chisq_He`) effectively gives the DA / non-DA answer.
 
 **`gaiaedr3_wd_main.csv`**: only `source_id` and `Pwd` are loaded.
 
